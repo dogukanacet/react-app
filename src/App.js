@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 import classes from "./App.css";
-import styled from "styled-components";
 
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import Person from "./Person/Person";
 
 class App extends Component {
@@ -69,13 +69,14 @@ class App extends Component {
         <div>
           {this.state.persons.map((person, index) => {
             return (
-              <Person
-                click={this.deletePersonHandler.bind(this, index)}
-                changed={(event) => this.nameChangedHandler(event, person.id)}
-                name={person.name}
-                age={person.age}
-                key={person.id}
-              />
+              <ErrorBoundary key={person.id}>
+                <Person
+                  click={this.deletePersonHandler.bind(this, index)}
+                  changed={(event) => this.nameChangedHandler(event, person.id)}
+                  name={person.name}
+                  age={person.age}
+                />
+              </ErrorBoundary>
             );
           })}
         </div>
@@ -94,11 +95,7 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <p className={assignedClasses.join(" ")}> hi </p>
-        <button
-          className={btnClass}
-          alt={this.state.showPersons}
-          onClick={this.togglePersonsHandler}
-        >
+        <button className={btnClass} onClick={this.togglePersonsHandler}>
           toggle persons
         </button>
         {persons}
