@@ -7,10 +7,6 @@ const person = (props) => {
   if (props.age < 2) {
     message = "year old";
   }
-  const rnd = Math.random();
-  if (rnd > 0.7) {
-    throw new Error("error");
-  }
 
   return (
     // <div className="Person" style={style}>
