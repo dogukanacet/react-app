@@ -37,6 +37,7 @@ class App extends Component {
     ],
     showPersons: false,
     otherState: "other value",
+    showCockpit: true,
   };
 
   nameChangedHandler = (event, id) => {
@@ -83,6 +84,13 @@ class App extends Component {
     });
   };
 
+  deleteCockpitHandler = () => {
+    const doesShow = this.state.showCockpit;
+    this.setState({
+      showCockpit: !doesShow,
+    });
+  };
+
   render() {
     console.log("[App.js] render");
     let persons = null;
@@ -103,12 +111,16 @@ class App extends Component {
 
     return (
       <div className={classes.App}>
-        <Cockpit
-          title={this.props.appTitle}
-          showPersons={this.state.showPersons}
-          persons={this.state.persons}
-          toggle={this.togglePersonsHandler}
-        />
+        <button onClick={this.deleteCockpitHandler}>remove button</button>
+        {this.state.showCockpit ? (
+          <Cockpit
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            toggle={this.togglePersonsHandler}
+          />
+        ) : null}
+
         {persons}
       </div>
     );
