@@ -120,7 +120,6 @@ class App extends Component {
             toggle={this.togglePersonsHandler}
           />
         ) : null}
-
         {persons}
       </div>
     );
