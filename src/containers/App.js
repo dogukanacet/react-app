@@ -4,6 +4,8 @@ import classes from "./App.css";
 
 import Cockpit from "../components/Cockpit/Cockpit";
 import Persons from "../components/Persons/Persons";
+import Aux from "../hoc/Auxiliary/Auxiliary";
+import withClass from "../hoc/WithClass/withClass";
 
 class App extends Component {
   constructor(props) {
@@ -31,13 +33,14 @@ class App extends Component {
 
   state = {
     persons: [
-      { id: "qwe1", name: "a", age: "1" },
-      { id: "qwrdfs2", name: "s", age: "2" },
-      { id: "sgfds3", name: "d", age: "3" },
+      { id: "qwe1", name: "a", age: 1 },
+      { id: "qwrdfs2", name: "s", age: 2 },
+      { id: "sgfds3", name: "d", age: 3 },
     ],
     showPersons: false,
     otherState: "other value",
     showCockpit: true,
+    changeCounter: 0,
   };
 
   nameChangedHandler = (event, id) => {
@@ -53,7 +56,12 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({ persons: persons });
+    this.setState((prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1,
+      };
+    });
   };
 
   // switchNameHandler = (newName) => {
@@ -110,7 +118,7 @@ class App extends Component {
     }
 
     return (
-      <div className={classes.App}>
+      <Aux classes={classes.App}>
         <button onClick={this.deleteCockpitHandler}>remove button</button>
         {this.state.showCockpit ? (
           <Cockpit
@@ -121,10 +129,10 @@ class App extends Component {
           />
         ) : null}
         {persons}
-      </div>
+      </Aux>
     );
     // return React.createElement('div', {className: 'App' }, React.createElement('h1', null, 'hi'))
   }
 }
 
-export default App;
+export default withClass(App, classes.App);
