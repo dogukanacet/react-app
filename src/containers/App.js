@@ -6,6 +6,7 @@ import Cockpit from "../components/Cockpit/Cockpit";
 import Persons from "../components/Persons/Persons";
 import Aux from "../hoc/Auxiliary/Auxiliary";
 import withClass from "../hoc/WithClass/withClass";
+import AuthContext from "../context/auth-context";
 
 class App extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class App extends Component {
     otherState: "other value",
     showCockpit: true,
     changeCounter: 0,
+    authenticated: false,
   };
 
   nameChangedHandler = (event, id) => {
@@ -99,6 +101,10 @@ class App extends Component {
     });
   };
 
+  loginHandler = () => {
+    this.setState({ authenticated: true });
+  };
+
   render() {
     console.log("[App.js] render");
     let persons = null;
@@ -111,6 +117,7 @@ class App extends Component {
               persons={this.state.persons}
               click={this.deletePersonHandler}
               changed={this.nameChangedHandler}
+              isAuthenticated={this.state.authenticated}
             />
           }
         </div>
@@ -120,15 +127,22 @@ class App extends Component {
     return (
       <Aux classes={classes.App}>
         <button onClick={this.deleteCockpitHandler}>remove button</button>
-        {this.state.showCockpit ? (
-          <Cockpit
-            title={this.props.appTitle}
-            showPersons={this.state.showPersons}
-            personsLength={this.state.persons.length}
-            toggle={this.togglePersonsHandler}
-          />
-        ) : null}
-        {persons}
+        <AuthContext.Provider
+          value={{
+            authenticated: this.state.authenticated,
+            login: this.loginHandler,
+          }}
+        >
+          {this.state.showCockpit ? (
+            <Cockpit
+              title={this.props.appTitle}
+              showPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              toggle={this.togglePersonsHandler}
+            />
+          ) : null}
+          {persons}
+        </AuthContext.Provider>
       </Aux>
     );
     // return React.createElement('div', {className: 'App' }, React.createElement('h1', null, 'hi'))
